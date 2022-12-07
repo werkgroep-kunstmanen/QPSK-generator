@@ -14,16 +14,17 @@
 # https://fpgasoftware.intel.com/eula.
 
 # Quartus Prime Version 21.1.0 Build 842 10/21/2021 SJ Lite Edition
-# File: /home/ralblas/proj/cpld/qpskgen.csv
-# Generated on: Fri Apr 15 16:29:10 2022
+# File: /home/ralblas/proj/cpld/qpskgen2/qpskgen.csv
+# Generated on: Wed Dec  7 14:41:40 2022
 
 # Note: The column header names should not be changed if you wish to import this .csv file into the Quartus Prime software.
 
-To,Direction,Location,I/O Bank,Fitter Location,I/O Standard,Reserved,Current Strength,Live I/O Check Error,Strict Preservation,Weak Pull-Up Resistor
-clk,Input,PIN_12,1,PIN_12,3.3-V LVTTL,,,,,on
-dectype1[1],Input,PIN_18,1,PIN_18,3.3-V LVTTL,,,,,on
-dectype1[0],Input,PIN_20,1,PIN_20,3.3-V LVTTL,,,,,on
-do[1],Output,PIN_2,1,PIN_2,3.3-V LVTTL,,,,,
-do[0],Output,PIN_4,1,PIN_4,3.3-V LVTTL,,,,,
-punct_on,Input,PIN_51,1,PIN_51,3.3-V LVTTL,,,,,on
-rand_on,Input,PIN_50,1,PIN_50,3.3-V LVTTL,,,,,on
+To,Direction,Location,I/O Bank,Fitter Location,I/O Standard,Reserved,Current Strength,Strict Preservation,Weak Pull-Up Resistor
+clk_ext,Input,PIN_14,1,PIN_14,3.3-V LVTTL,,,,on
+clk_int,Input,PIN_12,1,PIN_12,3.3-V LVTTL,,,,
+clk_sw,Input,PIN_16,1,PIN_16,3.3-V LVTTL,,,,on
+dec_type[1],Input,PIN_18,1,PIN_18,3.3-V LVTTL,,,,on
+dec_type[0],Input,PIN_20,1,PIN_20,3.3-V LVTTL,,,,on
+do[1],Output,PIN_2,1,PIN_2,3.3-V LVTTL,,,,
+do[0],Output,PIN_4,1,PIN_4,3.3-V LVTTL,,,,
+rand_on,Input,PIN_50,1,PIN_50,3.3-V LVTTL,,,,on
