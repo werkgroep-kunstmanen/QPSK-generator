@@ -69,7 +69,9 @@ entity qpskgen is
   (
     dec_type    : in     std_logic_vector(1 downto 0);      -- choose generator type
     rand_on     : in     std_logic;                         -- normally on
-    clk         : in     std_logic;                         -- clock 50 MHz
+    clk_int     : in     std_logic;                         -- clock 50 MHz
+    clk_ext     : in     std_logic;                         -- clock ext.
+    clk_sw      : in     std_logic;                         -- '0'=ext. clock, no div.
     do          : buffer std_logic_vector(1 downto 0):="00" --  Q / I
   );
 end entity qpskgen;
@@ -107,8 +109,8 @@ architecture b of qpskgen is
 
   type frac is array(1 to 2) of integer range 0 to 127;
   constant dt_metp  : frac:=(100,84);
-  constant dt_no20  : frac:=(10,6); -- 
-  constant dt_aqua  : frac:=(10,6); -- see  div2!
+  constant dt_no20  : frac:=(10,6);  -- see  div2!
+  constant dt_aqua  : frac:=(10,6);  -- see  div2!
 
   procedure frac_cnt
   (
@@ -135,12 +137,14 @@ architecture b of qpskgen is
   signal   dcnt  : natural range 0 to dcntmax;
   signal   inv   : boolean;
   constant ymax: natural:=8;
-  signal ycnt: natural range 0 to ymax-1;
-signal punct_on: std_logic:='0';
-signal div2: std_logic:='0';
-signal dectype: std_logic_vector(2 downto 0);
+  signal   ycnt: natural range 0 to ymax-1;
+  signal   punct_on: std_logic:='0';
+  signal   div2: std_logic:='0';
+  signal   dectype: std_logic_vector(2 downto 0);
+  signal   clk: std_logic;
 begin
   dectype<='0' & dec_type;
+  clk<=clk_int when clk_sw='1' else clk_ext;
   gen: process
 
   procedure fgen
@@ -233,12 +237,12 @@ begin
         punct_on<='0';
         nrcps <= 1;
         frac_cnt(dt_aqua,cnt,ena0);  -- 49.152000*224/367 / 2 =15* 1 ; see div2 
-                                     -- 50*6/10/2
+                                     -- 50*6/10           / 2
       when others => -- metop
         punct_on<='1';
         nrcps <= 6;
         frac_cnt(dt_metp,cnt,ena0);  -- 49.152000*875/1024  / 2 =3.5 * 6
-                                     -- 50*84/100
+                                     -- 50*84/100           / 2 =3.5 * 6
     end case;
 
 
@@ -252,7 +256,13 @@ begin
     end if;
 
     ena1<=ena0;
-    if ena0='1' and ena1='0' then ena<='1'; else ena<='0'; end if;
+    -- detect pos. edge on ena0
+    if clk_sw='0' or (ena0='1' and ena1='0') then 
+      ena<='1'; 
+    else
+      ena<='0';
+    end if;
+
     if ena='1' then
       if nrcps>1 and dat_cnt<nrcps-1 then
         dat_cnt<=dat_cnt + 1;
@@ -329,9 +339,9 @@ begin
               --             fy3:   a,b / c,d / e,f ==> a,b / d,e
               case punccnt is
                 when 1 =>
-                  dop(j)(1)<=gt2;
+                  dop(j)(1)<=gt2;     -- forget gt1
                 when 2 =>
-                  dop(j)(0)<=gt1;
+                  dop(j)(0)<=gt1;     -- forget gt2
                 when others =>
                   dop(j)(0)<=gt1;
                   dop(j)(1)<=gt2;
@@ -384,7 +394,7 @@ begin
       else
         do(1)<=dox(0)(0);
         do(0)<=dox(0)(1);
-        end if;
+      end if;
     end if;
   end process gen;
 end b;
