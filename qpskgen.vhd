@@ -319,6 +319,9 @@ begin
 
         if dectype=t_aqua then
           div2<=not div2;
+          if bitcnt=0 then
+            div2<='0';
+          end if;
           if div2='1' then
             dop(0)(0)<=bitje_d(0);  -- bits to I/Q resp.
           else
@@ -389,11 +392,11 @@ begin
       end if;
 
       if punct_on='1' then
-        do(1)<=dox(0)(0);
-        do(0)<=dox(0)(1);
+        do(1)<=dox(0)(1);
+        do(0)<=dox(0)(0);
       else
-        do(1)<=dox(0)(0);
-        do(0)<=dox(0)(1);
+        do(1)<=dox(0)(1);
+        do(0)<=dox(0)(0);
       end if;
     end if;
   end process gen;
