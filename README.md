@@ -1,6 +1,6 @@
 # QPSK-generator
 I/Q generator for Metop, Aqua and NOAA20.
-Using external oscillator any datarate up to 55 MHz (or more) can be realized.
+Using external oscillator any datarate up to 55 MHz (or more) can be realized. Bit-rate generated is OK at frame-level, but payload is not valid. So only suitable to check bit- and frame synchronisation.
 
 Fits in EPM240 CPLD; use Quartus lite (free software) to synthesize and load the code.
 
